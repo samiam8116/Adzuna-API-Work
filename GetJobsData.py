@@ -1,8 +1,17 @@
 import requests
 
+
 def display_data(to_display):
-    for recipe in to_display:
-        print(recipe['title'])
+    for company in to_display:
+        # print company to terminal
+        print(company['company'])
+
+
+    for data in to_display:
+        # write data to file "data.txt"
+        f = open("data.txt", "w")
+        f.write(str(data))
+        f.close()
 
 
 def get_data(location):
@@ -16,6 +25,7 @@ def get_data(location):
 def get_params():
     key_word = input("What key word do you want to search for?:")
     return key_word
+
 
 
 def main():
