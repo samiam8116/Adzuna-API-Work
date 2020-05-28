@@ -1,6 +1,5 @@
 import requests
 
-
 def display_data(to_display):
     for recipe in to_display:
         print(recipe['title'])
