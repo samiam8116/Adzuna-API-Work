@@ -1,17 +1,17 @@
 import requests
 
 
+# print company name to terminal
 def display_data(to_display):
     for company in to_display:
-        # print company to terminal
-        print(company['company'])
+        print(company['company'].get('display_name'))
 
 
-    for data in to_display:
-        # write data to file "data.txt"
-        f = open("data.txt", "w")
-        f.write(str(data))
-        f.close()
+# write all data to file "jobs_data.txt"
+def write_data(data, filename='jobs_data.txt'):
+    with open(filename, 'w') as file:
+        for job in data:
+            print(job, file=file)
 
 
 def get_data(location):
@@ -27,13 +27,13 @@ def get_params():
     return key_word
 
 
-
 def main():
     params = get_params()
-    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what=javascript%20developer&what_exclude={params[0]}&where=london&sort_by=salary&salary_min=30000&full_time=1&permanent=1&content-type=application/json"
+    loc = f"http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what={params}"
     print(loc)
     data = get_data(loc)
     display_data(data)
+    write_data(data, "jobs_data.txt")
 
 
 if __name__ == '__main__':
