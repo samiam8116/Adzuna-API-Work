@@ -29,7 +29,8 @@ def get_params():
 
 def main():
     params = get_params()
-    loc = f"http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what={params}"
+    loc = f"http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20&what={params} "
     print(loc)
     data = get_data(loc)
     display_data(data)
