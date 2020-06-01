@@ -19,4 +19,3 @@ def test_get_bad_data():
     assert type(test_results) == list
     assert len(test_results) == 0
 
-    
