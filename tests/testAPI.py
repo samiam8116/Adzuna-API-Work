@@ -18,4 +18,5 @@ def test_get_bad_data():
     test_results = GetJobsData.get_data(test_location)
     assert type(test_results) == list
     assert len(test_results) == 0
+
     
