@@ -22,7 +22,7 @@ def get_data(location):
     return data["results"]
 
 
-def get_params(): # adding comment to test github workflow
+def get_params():  # adding comment to test github workflow
     key_word = input("What key word do you want to search for?:")
     return key_word
 
