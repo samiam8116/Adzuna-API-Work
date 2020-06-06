@@ -1,11 +1,11 @@
 import requests
-# test
+import sqlite3
 
 
 # print company name to terminal
 def display_data(to_display):
-    for company in to_display:
-        print(company['company'].get('display_name'))
+    for job in to_display:
+        print(job['company'].get('display_name'))
 
 
 # write all data to file "jobs_data.txt"
@@ -23,7 +23,24 @@ def get_data(location):
     return data["results"]
 
 
-def get_params():  # adding comment to test github workflow
+def save_data(jobs: list, cursor: sqlite3.Cursor):
+    for job in jobs:
+        cursor.execute("INSERT INTO jobs(id, title, company, location, description) VALUES(?,?,?,?,?);",
+                       [job["id"], job["title"], job["company"].get('display_name'),
+                        job['location'].get('display_name'), job['description']])
+
+
+def setup_database(cursor: sqlite3.Cursor):
+    create_statement = """CREATE TABLE IF NOT EXISTS jobs (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    company TEXT NOT NULL,
+    location TEXT,
+    description TEXT);"""
+    cursor.execute(create_statement)
+
+
+def get_params(): 
     key_word = input("What key word do you want to search for?:")
     return key_word
 
@@ -33,7 +50,13 @@ def main():
     loc = f"http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
           f"&results_per_page=20&what={params} "
     print(loc)
+    connection = sqlite3.connect("jobs.db")
+    cursor = connection.cursor()
+    setup_database(cursor)
     data = get_data(loc)
+    save_data(data, cursor)
+    connection.commit()
+    connection.close()
     display_data(data)
     write_data(data, "jobs_data.txt")
 
