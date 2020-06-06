@@ -40,7 +40,7 @@ def setup_database(cursor: sqlite3.Cursor):
     cursor.execute(create_statement)
 
 
-def get_params(): 
+def get_params():  # adding comment to test github workflow
     key_word = input("What key word do you want to search for?:")
     return key_word
 
