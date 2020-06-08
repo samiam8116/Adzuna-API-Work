@@ -42,7 +42,7 @@ def setup_database(cursor: sqlite3.Cursor):
     cursor.execute(create_statement)
 
 
-def get_params():
+def get_params():  # adding comment to test github workflow
     key_word = ['python', 'java', 'golang', 'javascript', 'devops', 'database', 'web', 'design']
     return random.choice(key_word)
 
