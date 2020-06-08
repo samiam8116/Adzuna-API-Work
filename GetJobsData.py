@@ -1,5 +1,6 @@
 import requests
 import sqlite3
+import random
 
 
 # print company name to terminal
@@ -41,15 +42,15 @@ def setup_database(cursor: sqlite3.Cursor):
     cursor.execute(create_statement)
 
 
-def get_params():  # adding comment to test github workflow
-    key_word = input("What key word do you want to search for?:")
-    return key_word
+def get_params():
+    key_word = ['python', 'java', 'golang', 'javascript', 'devops', 'database', 'web', 'design']
+    return random.choice(key_word)
 
 
 def main():
     params = get_params()
-    loc = f"http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
-          f"&results_per_page=20&what={params} "
+    loc = f"http://api.adzuna.com/v1/api/jobs/us/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20&what={params}"
     print(loc)
     connection = sqlite3.connect("jobs.db")
     cursor = connection.cursor()
