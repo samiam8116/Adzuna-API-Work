@@ -25,14 +25,15 @@ def get_data(location):
 
 def save_data(jobs: list, cursor: sqlite3.Cursor):
     for job in jobs:
-        cursor.execute("INSERT INTO jobs(id, title, company, location, description) VALUES(?,?,?,?,?);",
-                       [job["id"], job["title"], job["company"].get('display_name'),
+        cursor.execute("INSERT INTO jobs(id, title, category, company, location, description) VALUES(?,?,?,?,?,?);",
+                       [job['id'], job['title'], job['category'].get('label'), job['company'].get('display_name'),
                         job['location'].get('display_name'), job['description']])
 
 
 def setup_database(cursor: sqlite3.Cursor):
     create_statement = """CREATE TABLE IF NOT EXISTS jobs (
     id TEXT PRIMARY KEY,
+    category TEXT,
     title TEXT NOT NULL,
     company TEXT NOT NULL,
     location TEXT,
