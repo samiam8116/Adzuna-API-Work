@@ -1,22 +1,65 @@
-# import pytest
-# import sqlite3
-
+import pytest
+import sqlite3
 import GetJobsData
 
 
+@pytest.fixture
+def grab_data():
+    return GetJobsData.get_data()
+
+
+# test get_data() function
 def test_get_data():
-    test_location = "http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key" \
-                    "=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what=javascript%20developer&content-type" \
-                    "=application/json"
-    test_results = GetJobsData.get_data(test_location)
-    # if there are more than 0 results ...
-    assert len(test_results) > 0
+    data = GetJobsData.get_data()
+    assert len(data) > 0
 
 
-def test_get_bad_data():
-    test_location = "http://api.adzuna.com/v1/apidev/jobs/gb/search/1?app_id=18381bc0&app_key" \
-                    "=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what=javascript%20developer&content-type" \
-                    "=application/json"
-    test_results = GetJobsData.get_data(test_location)
-    assert type(test_results) == list
-    assert len(test_results) == 0
+def test_if_table_exists():
+    connection = sqlite3.connect("jobs.db")
+    cursor = connection.cursor()
+
+    # get the count of tables
+    cursor.execute(''' SELECT count(*) FROM sqlite_master WHERE type='table' AND name LIKE 'jobs'; ''')
+    # if the count is 1, then table exists
+    if cursor.fetchone()[0] <= 1:
+        print('Table exists.')
+    else:
+        print('Table does not exist.')
+
+    # commit the changes to db
+    connection.commit()
+    # close the connection
+    connection.close()
+
+
+# test if good data goes into the database
+# (I am saying that "good data" has an ID that is an integer)
+def test_good_data(grab_data):
+    jobs = grab_data
+    has_valid_id = False
+    for job in jobs:
+        if job['id'].isdigit():
+            has_valid_id = True
+            print('The ID is valid')
+    assert has_valid_id
+
+
+# test if bad data goes into the database
+# (I am saying that "bad data" has an ID that is NOT an integer)
+def test_bad_data(grab_data):
+    jobs = grab_data
+    does_not_have_valid_id = False
+    for job in jobs:
+        if job['id'].isdigit():
+            does_not_have_valid_id = True
+            print('The ID is not valid')
+    assert does_not_have_valid_id
+
+# test from sprint01
+# def test_get_bad_data():
+#     test_location = "http://api.adzuna.com/v1/apidev/jobs/gb/search/1?app_id=18381bc0&app_key" \
+#                     "=f20a9d4e1c0d42e8d120af190ecfb44d&results_per_page=20&what=javascript%20developer&content-type" \
+#                     "=application/json"
+#     test_results = GetJobsData.get_data(test_location)
+#     assert type(test_results) == list
+#     assert len(test_results) == 0
