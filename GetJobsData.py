@@ -18,20 +18,24 @@ def write_data(data, filename='jobs_data.txt'):
 
 def get_data():
     key_word = ['python', 'java', 'golang', 'javascript', 'devops', 'database', 'web', 'design']
-    location = f"http://api.adzuna.com/v1/api/jobs/us/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+    results = []
+    for term in key_word:
+        location = f"http://api.adzuna.com/v1/api/jobs/us/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
                f"&results_per_page=20&what={random.choice(key_word)}"
-    response = requests.get(location)
-    if response.status_code != 200:
-        return []
-    data = response.json()
-    print(location)
-    return data["results"]
+        response = requests.get(location)
+        if response.status_code != 200:
+            continue
+        data = response.json()
+        print(location)
+        for item in data["results"]:
+            results.append(item)
+    return results
 
 
 def save_data(jobs: list, cursor: sqlite3.Cursor):
     for job in jobs:
-        cursor.execute("INSERT INTO jobs(id, title, category, company, location, description) VALUES(?,?,?,?,?,?);",
-                       [job['id'], job['title'], job['category'].get('label'), job['company'].get('display_name'),
+        cursor.execute("INSERT INTO jobs(title, category, company, location, description) VALUES(?,?,?,?,?);",
+                       [job['title'], job['category'].get('label'), job['company'].get('display_name'),
                         job['location'].get('display_name'), job['description']])
 
 
