@@ -1,5 +1,3 @@
-from tkinter.tix import Form
-
 import requests
 import sqlite3
 import random
@@ -17,11 +15,65 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtWidgets
 
 
+class TechnologyWindow(QWidget):
+
+    def __init__(self, to_display):
+        super().__init__()
+
+        layout = QFormLayout()
+        self.data_to_display = to_display
+        self.data_item_displayed = 0
+
+        self.hi = QPushButton("Hi")
+        layout.addWidget(self.hi)
+
+        self.setLayout(layout)
+        self.setWindowTitle("Technology Window")
+
+
+class LocationWindow(QWidget):
+
+    def __init__(self, to_display):
+        super().__init__()
+
+        layout = QFormLayout()
+        self.data_to_display = to_display
+        self.data_item_displayed = 0
+
+        self.hi = QPushButton("Hi")
+        layout.addWidget(self.hi)
+
+        self.setLayout(layout)
+        self.setWindowTitle("Location Window")
+
+
+class CompanyWindow(QWidget):
+
+    def __init__(self, to_display):
+        super().__init__()
+
+        layout = QFormLayout()
+        self.data_to_display = to_display
+        self.data_item_displayed = 0
+
+        self.hi = QPushButton("Hi")
+        layout.addWidget(self.hi)
+
+        self.setLayout(layout)
+        self.setWindowTitle("Location Window")
+
+
 class FilterWindow(QWidget):
 
     def __init__(self, to_display):
         super().__init__()
 
+        # ADDITIONAL WINDOWS
+        self.technology_window = TechnologyWindow(self)
+        self.location_window = LocationWindow(self)
+        self.company_window = CompanyWindow(self)
+
+        # Layout stuff
         layout = QFormLayout()
         self.data_to_display = to_display
         self.data_item_displayed = 0
@@ -34,7 +86,7 @@ class FilterWindow(QWidget):
 
         # FIND TECHNOLOGY JOBS - switch to technology window
         self.technology_apply_button = QtWidgets.QPushButton('Apply Technology Filter')
-        self.technology_apply_button.clicked.connect(self.technology_window)
+        self.technology_apply_button.clicked.connect(self.switch_technology_window)
         layout.addWidget(self.technology_apply_button)
 
         # LOCATION FILTER
@@ -45,7 +97,7 @@ class FilterWindow(QWidget):
 
         # FIND LOCATION JOBS - switch to location window
         self.location_apply_button = QtWidgets.QPushButton('Apply Location Filter')
-        self.location_apply_button.clicked.connect(self.location_window)
+        self.location_apply_button.clicked.connect(self.switch_location_window)
         layout.addWidget(self.location_apply_button)
 
         # COMPANY FILTER
@@ -56,7 +108,7 @@ class FilterWindow(QWidget):
 
         # FIND COMPANY JOBS - switch to company window
         self.company_apply_button = QtWidgets.QPushButton('Apply Company Filter')
-        self.company_apply_button.clicked.connect(self.company_window)
+        self.company_apply_button.clicked.connect(self.switch_company_window)
         layout.addWidget(self.company_apply_button)
 
         self.setLayout(layout)
@@ -78,18 +130,39 @@ class FilterWindow(QWidget):
         if ok:
             self.company_line_edit.setText(str(company_input))
 
-    # OPEN NEW WINDOWS FOR EACH FILTER
-    def technology_window(self):
-        technology_window = QDialog(self)
-        technology_window.show()
+    # SWITCH TO NEW WINDOWS FOR EACH FILTER
+    def switch_technology_window(self):
+        self.technology_window.show()
 
-    def location_window(self):
-        location_window = QDialog(self)
-        location_window.show()
+    def switch_location_window(self):
+        self.location_window.show()
 
-    def company_window(self):
-        company_window = QDialog(self)
-        company_window.show()
+    def switch_company_window(self):
+        self.company_window.show()
+
+
+class TechnologyLayout(QWidget):
+
+    def __init__(self, to_display):
+        super().__init__()
+
+        layout = QFormLayout()
+        self.data_to_display = to_display
+        self.data_item_displayed = 0
+
+        # TECHNOLOGY FILTER
+        self.technology_filter_button = QPushButton("Technology Filter")
+        self.technology_filter_button.clicked.connect(self.get_technology)
+        self.technology_line_edit = QLineEdit()
+        layout.addRow(self.technology_filter_button, self.technology_line_edit)
+
+        # FIND TECHNOLOGY JOBS - switch to technology window
+        self.technology_apply_button = QtWidgets.QPushButton('Apply Technology Filter')
+        self.technology_apply_button.clicked.connect(self.technology_window)
+        layout.addWidget(self.technology_apply_button)
+
+        self.setLayout(layout)
+        self.setWindowTitle("Technology Window")
 
 
 # print company name to terminal
