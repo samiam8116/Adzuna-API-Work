@@ -10,13 +10,6 @@ class JobWindow(QWidget):
         super().__init__()
         self.data_to_display = to_display
         self.data_item_displayed = 0
-        current_data = self.data_to_display[self.data_item_displayed]
-
-
-    def show_next_job(self):
-        self.data_item_displayed += 1
-        current_data = self.data_to_display[self.data_item_displayed]
-        self.job_title.setText(current_data['title'])
 
 
 def display_data(to_display):
