@@ -1,18 +1,13 @@
 import requests
 import sqlite3
 import sys
-# from PyQt5.QtWidgets import QApplication, QFormLayout
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QPushButton
-# from PyQt5.QtWidgets import QListWidget
 from PyQt5.QtWidgets import QInputDialog
-# from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QFormLayout
-# from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow
-# from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtWidgets
 
 
@@ -32,21 +27,11 @@ class JobWindow(QWidget):
         self.technology_line_edit = QLineEdit()
         layout.addRow(self.technology_filter_button, self.technology_line_edit)
 
-        # FIND TECHNOLOGY JOBS - switch to technology window
-        self.technology_apply_button = QtWidgets.QPushButton('Apply Technology Filter')
-        # self.technology_apply_button.clicked.connect(self.switch_technology_window)
-        layout.addWidget(self.technology_apply_button)
-
         # LOCATION FILTER
         self.location_filter_button = QPushButton("Location Filter")
         self.location_filter_button.clicked.connect(self.get_location)
         self.location_line_edit = QLineEdit()
         layout.addRow(self.location_filter_button, self.location_line_edit)
-
-        # FIND LOCATION JOBS - switch to location window
-        self.location_apply_button = QtWidgets.QPushButton('Apply Location Filter')
-        # self.location_apply_button.clicked.connect(self.switch_location_window)
-        layout.addWidget(self.location_apply_button)
 
         # COMPANY FILTER
         self.company_filter_button = QPushButton("Company Filter")
@@ -54,10 +39,10 @@ class JobWindow(QWidget):
         self.company_line_edit = QLineEdit()
         layout.addRow(self.company_filter_button, self.company_line_edit)
 
-        # FIND COMPANY JOBS - switch to company window
-        self.company_apply_button = QtWidgets.QPushButton('Apply Company Filter')
-        # self.company_apply_button.clicked.connect(self.switch_company_window)
-        layout.addWidget(self.company_apply_button)
+        # Button to start search with filters
+        self.apply_filters = QPushButton("Apply Filters")
+        # self.apply_filters.clicked.connect(??????)
+        layout.addRow(self.apply_filters)
 
         # Jobs are displayed in this line edit
         jobs_caption = QLabel("Jobs:")
@@ -96,6 +81,32 @@ class JobWindow(QWidget):
         self.data_item_displayed += 1
         current_data = self.data_to_display[self.data_item_displayed]
         self.job_description.setText(current_data['description'])
+
+    def get_data_extension(self):
+        # technology input
+        technology_input, ok = QInputDialog.getText(self, 'Location Filter', 'Enter location:')
+        if ok:
+            self.technology_line_edit.setText(str(technology_input))
+            return technology_input
+
+        # location input
+        location_input, ok = QInputDialog.getText(self, 'Location Filter', 'Enter location:')
+        if ok:
+            self.location_line_edit.setText(str(location_input))
+
+        # company input
+        company_input, ok = QInputDialog.getText(self, "Company Filter", "Enter company")
+        if ok:
+            self.company_line_edit.setText(str(company_input))
+
+        return technology_input, location_input, company_input
+
+        # Put user input into the URL
+        loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+              f"&results_per_page=20&what={technology_input}&where={location_input}&salary_min={company_input}"
+
+        # Call get_data() with that user input to retrieve the API data
+        get_data(loc)
 
     # GET USER INPUT FOR FILTERS
     def get_technology(self):
@@ -156,18 +167,26 @@ def setup_database(cursor: sqlite3.Cursor):
     cursor.execute(create_statement)
 
 
-def get_params():
-    technology = input("what technology?:")
-    location = input("what location?:")
-    salary_min = input("salary minimum?:")
-    return technology, location, salary_min
+# def get_params():
+#     technology = input("what technology?:")
+#     location = input("what location?:")
+#     salary_min = input("salary minimum?:")
+#     return technology, location, salary_min
+
+
+# def stuff():
+#     loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+#           f"&results_per_page=20&what={params[0]}&where={params[1]}&salary_min={params[2]}"
+#     print(loc)
+#     data = get_data(loc)
+#     save_data(data, cursor)
 
 
 def main():
     app = QApplication(sys.argv)
-    params = get_params()
+    # params = get_params()
     loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
-          f"&results_per_page=20&what={params[0]}&where={params[1]}&salary_min={params[2]}"
+          f"&results_per_page=20&what={JobWindow.get_technology}&where={JobWindow.get_location}&salary_min={JobWindow.get_company}"
     print(loc)
     connection = sqlite3.connect("jobs.db")
     cursor = connection.cursor()
