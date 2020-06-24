@@ -16,11 +16,11 @@ def test_get_data():
 
 # test if the table called "jobs" exists
 def test_if_table_exists():
-    connection = sqlite3.connect("jobs.db")
+    connection = sqlite3.connect("newJobs.db")
     cursor = connection.cursor()
 
     # get the count of tables
-    cursor.execute(''' SELECT count(*) FROM sqlite_master WHERE type='table' AND name LIKE 'jobs'; ''')
+    cursor.execute(''' SELECT count(*) FROM sqlite_master WHERE type='table' AND name LIKE 'newJobs'; ''')
     # if count <= 1, then the table exists
     if cursor.fetchone()[0] <= 1:
         print('Table exists.')
