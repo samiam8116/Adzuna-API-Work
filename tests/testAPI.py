@@ -19,7 +19,7 @@ def grab_data():
 
 # test get_data() function
 def test_get_data():
-    technology = "java"
+    technology = "python"
     location = "london"
     salary_minimum = "10000"
     loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key" \
