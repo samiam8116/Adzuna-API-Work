@@ -52,13 +52,6 @@ def setup_database(cursor: sqlite3.Cursor):
     cursor.execute(create_statement)
 
 
-def get_params():
-    technology = input("what technology?:")
-    location = input("what location?:")
-    salary_min = input("salary minimum?:")
-    return technology, location, salary_min
-
-
 def main():
     app = QApplication(sys.argv)
     data = []

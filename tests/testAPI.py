@@ -5,16 +5,20 @@ import GetJobsData
 
 @pytest.fixture
 def grab_data():
-    return GetJobsData.get_data()
+    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20"
+    return GetJobsData.get_data(loc)
 
 
 # test get_data() function
 def test_get_data():
-    data = GetJobsData.get_data()
+    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20"
+    data = GetJobsData.get_data(loc)
     assert len(data) > 0
 
 
-# test if the table called "jobs" exists
+# test if the table called "newJobs" exists
 def test_if_table_exists():
     connection = sqlite3.connect("newJobs.db")
     cursor = connection.cursor()

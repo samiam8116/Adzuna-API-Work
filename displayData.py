@@ -17,6 +17,7 @@ class JobWindow(QtWidgets.QWidget):
         main_layout.addItem(data_display_layout)
 
         self.list_control.itemClicked.connect(self.clicked_item)
+
         self.setLayout(main_layout)
 
     def display_data(self, job_data: list):
@@ -40,7 +41,7 @@ def get_filtered_data(cursor: sqlite3.Cursor):
                                                                  "Choose a salary minimum to filter data")
 
     sql_select = f"SELECT title FROM newJobs WHERE title LIKE '%{technologies}%' OR location LIKE '%{locations}%' OR " \
-                 f"salary_min > '%{salary_mins}%'; "
+                 f"salary_min > '%{salary_mins}%';"
 
     results = cursor.execute(sql_select)
     return results
