@@ -5,15 +5,17 @@ import GetJobsData
 
 @pytest.fixture
 def grab_data():
-    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
-          f"&results_per_page=20"
+    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key" \
+          f"=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20&what=java&where=london&salary_min=1"
     return GetJobsData.get_data(loc)
 
 
 # test get_data() function
 def test_get_data():
-    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key=f20a9d4e1c0d42e8d120af190ecfb44d" \
-          f"&results_per_page=20"
+    loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key" \
+          f"=f20a9d4e1c0d42e8d120af190ecfb44d" \
+          f"&results_per_page=20&what=java&where=london&salary_min=1"
     data = GetJobsData.get_data(loc)
     assert len(data) > 0
 
