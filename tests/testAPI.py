@@ -19,9 +19,12 @@ def grab_data():
 
 # test get_data() function
 def test_get_data():
+    technology = "java"
+    location = "london"
+    salary_minimum = "10000"
     loc = f"https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=18381bc0&app_key" \
           f"=f20a9d4e1c0d42e8d120af190ecfb44d" \
-          f"&results_per_page=20&what=java&where=london&salary_min=1"
+          f"&results_per_page=20&what={technology}&where={location}&salary_min={salary_minimum}"
     data = GetJobsData.get_data(loc)
     assert len(data) > 0
 
