@@ -10,7 +10,7 @@ class JobWindow(QWidget):
         super().__init__()
         self.data_to_display = to_display
         self.data_item_displayed = 0
-
+        
 
 def display_data(to_display):
     window = JobWindow(to_display)
